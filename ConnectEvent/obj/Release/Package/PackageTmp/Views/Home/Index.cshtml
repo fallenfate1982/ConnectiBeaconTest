@@ -1,0 +1,106 @@
+﻿@model ConnectEvent.Models.Attendee
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<style>
+    .field-validation-error {
+    color: red !important;
+}
+</style>
+<div class="container-fluid">
+
+    <div class="row" style="margin-top:-30px;">
+        <img class="imageMainBorder1" alt="image" src="~/Content/images/border1.png" />
+        <img class="imageMain" alt="image" src="~/Content/images/connectEvent.png" />
+        <img class="imageMainBorder2" alt="image" src="~/Content/images/border1.png" />
+        <img class="imageDate" alt="image" src="~/Content/images/date.png" />
+        <img class="imageMainBorder2" alt="image" src="~/Content/images/border1.png" />
+    </div>
+
+    <div class="col-md-4 col-md-offset-4">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label for="firstname">First Name</label>
+                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                @Html.ValidationMessageFor(model => model.FirstName)
+            </div>
+            <div class="form-group">
+                <label for="firstname">Last Name</label>
+                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                @Html.ValidationMessageFor(model => model.LastName)
+            </div>
+            <div class="form-group">
+                <label for="company">Phone</label>
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "Phone" })
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+            <div class="form-group">
+                <label for="company">Company</label>
+                @Html.TextBoxFor(model => model.Company, new { @class = "form-control", @placeholder = "Company" })
+                @Html.ValidationMessageFor(model => model.Company)
+            </div>
+            <div class="form-group">
+                @Html.RadioButtonFor(model => model.Attending, true)<label for="company">Attending</label>
+                @Html.RadioButtonFor(model => model.Attending, false)<label for="company">Not Attending</label>
+            </div>
+            @Html.HiddenFor(model => model.Platform, new { @id = "Platform"})
+            <a href="javascript:$('form').submit();" class=""><img class="" alt="image" src="~/Content/images/rsvp.png" /></a>
+            <div class="form-group" style="font-family: fantasy;font-size: 16px;color: #FF9B00;">
+                <span>*Are you attending? Do you have an Android or iOS device? Then keep your phone close as you will receive our Connect Mobile Application. The application features are geared to enchance your experience at the event.</span>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#Platform").val(getOS());
+    });
+    function getPlatform() {
+        var platform = ["Win32", "Android", "iOS"];
+        for (var i = 0; i < platform.length; i++) {
+            if (navigator.platform.indexOf(platform[i]) > -1) {
+                return platform[i];
+            }
+        }
+    }
+    
+    
+
+    function getOS() {
+        var ua = navigator.userAgent;
+        var uaindex;
+
+        var mobileOS;    // will either be iOS, Android or unknown
+        var mobileOSver; // this is a string, use Number(mobileOSver) to convert
+
+        // determine OS
+        if (ua.match(/iPad/i) || ua.match(/iPhone/i)) {
+            mobileOS = 'iOS';
+            uaindex = ua.indexOf('OS ');
+        }
+        else if (ua.match(/Android/i)) {
+            mobileOS = 'Android';
+            uaindex = ua.indexOf('Android ');
+        }
+        else {
+            mobileOS = 'unknown';
+        }
+
+        // determine version
+        if (mobileOS === 'iOS' && uaindex > -1) {
+            mobileOSver = ua.substr(uaindex + 3, 3).replace('_', '.');
+        }
+        else if (mobileOS === 'Android' && uaindex > -1) {
+            mobileOSver = ua.substr(uaindex + 8, 3);
+        }
+        else {
+            mobileOSver = 'unknown';
+        }
+
+        return mobileOS + ' - ' + mobileOSver;
+    }
+</script>
